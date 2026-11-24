@@ -1,0 +1,1 @@
+"""Shariah screening — requires user-supplied data; no fabricated compliance."""

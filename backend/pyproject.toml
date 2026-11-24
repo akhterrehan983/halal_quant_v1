@@ -1,0 +1,14 @@
+[project]
+name = "halal-quant-backend"
+version = "0.2.0"
+description = "Halal Quant V1 — research and paper-trading API"
+requires-python = ">=3.12"
+readme = "../README.md"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

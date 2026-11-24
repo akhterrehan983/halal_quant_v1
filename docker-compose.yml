@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: halal_quant_postgres
+    environment:
+      POSTGRES_USER: halal_quant
+      POSTGRES_PASSWORD: halal_quant_dev
+      POSTGRES_DB: halal_quant
+    ports:
+      - "5432:5432"
+    volumes:
+      - halal_quant_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U halal_quant -d halal_quant"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  halal_quant_pgdata:

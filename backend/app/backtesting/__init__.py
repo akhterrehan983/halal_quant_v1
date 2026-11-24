@@ -1,0 +1,1 @@
+"""Historical backtesting — research validation, not profit guarantees."""
