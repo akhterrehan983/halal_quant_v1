@@ -25,6 +25,7 @@ _SETTINGS_PATCH_TARGETS = (
     "app.api.v1.portfolio",
     "app.api.legacy",
     "app.portfolio.service",
+    "app.portfolio.snapshots",
     "app.api.dependencies",
 )
 
@@ -36,11 +37,15 @@ def _postgres_test(request: pytest.FixtureRequest) -> bool:
 def reset_persisted_default_rows() -> None:
     from app.core.database import SessionLocal
     from app.models.portfolio_risk import PortfolioBook
+    from app.models.portfolio_valuation import PortfolioValuationSnapshot
     from app.models.shariah_execution import ExecutionStateRow
 
     if SessionLocal is None:
         return
     with SessionLocal() as session:
+        session.execute(
+            delete(PortfolioValuationSnapshot).where(PortfolioValuationSnapshot.book_name == "default")
+        )
         session.execute(delete(PortfolioBook).where(PortfolioBook.name == "default"))
         session.execute(delete(ExecutionStateRow).where(ExecutionStateRow.name == "default"))
         session.commit()
@@ -73,9 +78,11 @@ def isolate_demo_mode(request, monkeypatch):
 def reset_in_memory_stores():
     from app.execution import store as exec_store
     from app.portfolio import store as portfolio_store
+    from app.portfolio.snapshots import clear_mem_snapshots_for_tests
 
     portfolio_store._BOOK_MEM = None  # noqa: SLF001
     exec_store._STATE = exec_store._empty()  # noqa: SLF001
+    clear_mem_snapshots_for_tests()
     yield
 
 

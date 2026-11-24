@@ -6,6 +6,7 @@ import MetricCard from '../components/common/MetricCard'
 import StatusBadge from '../components/common/StatusBadge'
 import { ShellError } from '../components/layout/MainLayout'
 import { api } from '../lib/api'
+import EquityCurve from '../components/charts/EquityCurve'
 import { money, pct } from '../utils/format'
 
 export default function Overview() {
@@ -29,19 +30,22 @@ export default function Overview() {
   const [book, setBook] = useState(null)
   const [holdings, setHoldings] = useState([])
   const [sigSummary, setSigSummary] = useState({ buy: 0, strong: 0, watch: 0 })
+  const [perfHistory, setPerfHistory] = useState({ points: [] })
 
   useEffect(() => {
     const loadDashboard = async () => {
       try {
-        const [r, b, sigs, h] = await Promise.all([
+        const [r, b, sigs, h, perf] = await Promise.all([
           api.regimeCurrent().catch(() => null),
           api.bookSummary().catch(() => null),
           api.unifiedSignals({ horizon, lifecycle: 'ACTIVE' }).catch(() => ({ items: [] })),
           api.bookHoldings().catch(() => ({ holdings: [] })),
+          api.valuationHistory({ limit: 90 }).catch(() => ({ points: [] })),
         ])
         setRegime(r)
         setBook(b)
         setHoldings(h.holdings || [])
+        setPerfHistory(perf)
         const items = sigs.items || []
         setSigSummary({
           buy: items.filter(s => s.category === 'BUY').length,
@@ -130,6 +134,25 @@ export default function Overview() {
         icon={Wallet}
       />
     </section>
+    {perfHistory.points?.length > 0 ? (
+      <section className="panel" style={{ marginBottom: 16 }}>
+        <div className="eyebrow">RESEARCH BOOK VALUATION HISTORY</div>
+        <p className="muted small">Point-in-time snapshots — not backtest curves.</p>
+        <ResponsiveContainer width="100%" height={180}>
+          <AreaChart data={perfHistory.points}>
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--grid-stroke)" />
+            <XAxis dataKey="date" tick={{ fontSize: 10 }} />
+            <YAxis tick={{ fontSize: 10 }} width={55} />
+            <Tooltip formatter={v => money(v)} />
+            <Area type="monotone" dataKey="equity" stroke="#239b7c" fill="#239b7c33" />
+          </AreaChart>
+        </ResponsiveContainer>
+      </section>
+    ) : (
+      <p className="muted small" style={{ margin: '0 0 16px' }}>
+        No portfolio valuation snapshots yet — use Portfolio → Record valuation snapshot.
+      </p>
+    )}
     <section className="content-grid">
       <div className="panel chart-panel">
         <div className="panel-head">

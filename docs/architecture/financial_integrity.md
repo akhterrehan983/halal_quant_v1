@@ -29,7 +29,15 @@
 
 See `docs/architecture/portfolio_consistency.md`.
 
+## Valuation snapshots (M13)
+
+- Append-only `portfolio_valuation_snapshots` (PostgreSQL) or in-memory list in demo mode.
+- Strict mark: missing prices block snapshot creation (no zero/silent fallback).
+- Drawdown history derived from stored snapshot equity — not recomputed with live prices.
+- Book peak still updated when a snapshot is generated (`update_book_peak=True`).
+- See `docs/architecture/valuation_snapshots.md`.
+
 ## Known gaps
 
-- Valuation snapshot history table not yet implemented (M13).
+- Snapshot not auto-run on every fill (use POST snapshot or external daily job).
 - `PaperPortfolio` in `service.py` is unused for writes; may be removed in a later cleanup.

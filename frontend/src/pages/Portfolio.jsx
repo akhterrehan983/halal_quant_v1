@@ -6,6 +6,7 @@ import MetricCard from '../components/common/MetricCard'
 import StatusBadge from '../components/common/StatusBadge'
 import { ShellError } from '../components/layout/MainLayout'
 import { api } from '../lib/api'
+import EquityCurve from '../components/charts/EquityCurve'
 import { money } from '../utils/format'
 
 export default function Portfolio() {
@@ -14,15 +15,37 @@ export default function Portfolio() {
   const [proposals, setProposals] = useState([])
   const [holdings, setHoldings] = useState([])
   const [propMsg, setPropMsg] = useState('')
+  const [perfHistory, setPerfHistory] = useState({ points: [] })
+  const [drawdown, setDrawdown] = useState(null)
+  const [snapMsg, setSnapMsg] = useState('')
 
   const loadPortfolio = async () => {
     try {
-      const [b, p, h] = await Promise.all([api.bookSummary(), api.bookProposals(), api.bookHoldings()])
+      const [b, p, h, perf, dd] = await Promise.all([
+        api.bookSummary(),
+        api.bookProposals(),
+        api.bookHoldings(),
+        api.valuationHistory({ limit: 180 }).catch(() => ({ points: [] })),
+        api.portfolioDrawdown().catch(() => null),
+      ])
       setBook(b)
       setProposals(p.items || [])
       setHoldings(h.holdings || h.items || [])
+      setPerfHistory(perf)
+      setDrawdown(dd)
     } catch (e) {
       setError(e.message)
+    }
+  }
+
+  const recordSnapshot = async () => {
+    try {
+      setSnapMsg('')
+      await api.recordValuationSnapshot({ trigger: 'on_demand' })
+      setSnapMsg('Valuation snapshot recorded.')
+      await loadPortfolio()
+    } catch (e) {
+      setSnapMsg(e.message)
     }
   }
 
@@ -64,10 +87,44 @@ export default function Portfolio() {
           <MetricCard
             label="Unrealized P&L"
             value={money(book.unrealized_pnl)}
-            sub={`Swing ${book.swing?.position_count ?? 0} · Pos ${book.positional?.position_count ?? 0} positions`}
+            sub={`Realized ${money(book.realized_pnl)}`}
+            icon={BarChart3}
+          />
+          <MetricCard
+            label="Invested (mkt)"
+            value={money(book.market_value)}
+            sub={`Max DD ${drawdown?.max_drawdown_pct ? (Number(drawdown.max_drawdown_pct) * 100).toFixed(1) : '—'}%`}
             icon={BarChart3}
           />
         </section>
+      )}
+      <div className="notice" style={{ marginTop: 12 }}>
+        <span>
+          Charts below use <b>recorded valuation snapshots</b> of the research book — not backtest engine results.
+        </span>
+        <button type="button" className="buy-btn" style={{ marginLeft: 12 }} onClick={recordSnapshot}>
+          Record valuation snapshot
+        </button>
+        {snapMsg && <span className="muted small" style={{ marginLeft: 8 }}>{snapMsg}</span>}
+      </div>
+      {perfHistory.points?.length > 0 ? (
+        <div className="md-grid" style={{ marginTop: 12 }}>
+          <div className="md-card">
+            <div className="eyebrow">EQUITY CURVE</div>
+            <EquityCurve points={perfHistory.points.map(p => ({ date: p.date, equity: p.equity }))} />
+          </div>
+          <div className="md-card">
+            <div className="eyebrow">DRAWDOWN (FROM SNAPSHOTS)</div>
+            <EquityCurve
+              points={perfHistory.points.map(p => ({ date: p.date, equity: Number(p.drawdown_pct) * 100 }))}
+              dataKey="equity"
+            />
+          </div>
+        </div>
+      ) : (
+        <p className="muted small" style={{ marginTop: 12 }}>
+          No valuation history yet. Record a snapshot after market data and holdings are loaded.
+        </p>
       )}
       <div className="md-grid">
         <div className="md-card">

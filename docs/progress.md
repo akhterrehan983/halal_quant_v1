@@ -1,5 +1,24 @@
 # Halal Quant V1 — Progress Log
 
+## Milestone 13 — Valuation snapshots & drawdown audit (complete)
+
+### Implemented
+
+- `portfolio_valuation_snapshots` model + Alembic `e8f91a2b4c10`
+- `app/portfolio/valuation.py`, `snapshots.py`, `drawdown_audit.py`, `valuation_schemas.py`
+- APIs: valuations list/latest/snapshot, drawdown, performance-history
+- Portfolio + Overview: equity/drawdown charts from snapshots (empty until first snapshot)
+- `docs/architecture/valuation_snapshots.md`
+- `tests/test_valuation_m13.py`
+
+### Verification
+
+- Backend: **94 passed**, 0 failed, 0 skipped, 237 warnings (~415s) — verified 2026-11-25 (includes `@pytest.mark.postgres` M12 + M13)
+- Migrate: `alembic upgrade head` → `e8f91a2b4c10`
+- Frontend: **5** Vitest tests, `npm run build` OK (prior run)
+
+---
+
 ## Milestone 12 — Single portfolio book (complete)
 
 ### Implemented

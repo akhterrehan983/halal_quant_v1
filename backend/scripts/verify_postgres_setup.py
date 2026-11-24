@@ -19,6 +19,7 @@ EXPECTED_TABLES = {
     "market_data_imports",
     "corporate_actions",
     "portfolio_books",
+    "portfolio_valuation_snapshots",
     "execution_state",
     "research_signals",
     "signal_lifecycle_events",

@@ -69,6 +69,16 @@ export const api = {
   signalById: (id) => request(`/api/v1/signals/${id}`),
   signalHistory: (id) => request(`/api/v1/signals/${id}/history`),
   bookSummary: () => request('/api/v1/portfolio/summary'),
+  valuationLatest: (book = 'default') => request(`/api/v1/portfolio/valuations/latest?book_name=${book}`),
+  valuationHistory: ({ book = 'default', limit = 120 } = {}) =>
+    request(`/api/v1/portfolio/performance-history?book_name=${book}&limit=${limit}`),
+  portfolioDrawdown: (book = 'default') => request(`/api/v1/portfolio/drawdown?book_name=${book}`),
+  recordValuationSnapshot: (body = { trigger: 'on_demand' }) =>
+    request('/api/v1/portfolio/valuations/snapshot', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    }),
   bookHoldings: () => request('/api/v1/portfolio/holdings'),
   bookProposals: (status) =>
     request(`/api/v1/portfolio/allocation-proposals${status ? `?status=${status}` : ''}`),

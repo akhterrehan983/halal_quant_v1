@@ -40,11 +40,9 @@
 
 | Field | Detail |
 |-------|--------|
-| **Severity** | High (risk audit trail) |
-| **Module** | `app/portfolio/store.py`, `app/portfolio/performance.py` |
-| **Issue** | Peak equity and drawdown live in book JSON; no time series of portfolio valuations for reconstruction. |
-| **Evidence** | `financial_integrity.md`; M9 deferred H5 partial fix. |
-| **Fix direction** | `portfolio_valuation_snapshots` table + write on persist path. |
+| **Status** | **Resolved (M13)** — `portfolio_valuation_snapshots`, drawdown audit from immutable rows, v1 APIs + Portfolio UI. |
+| **Remaining** | No automatic post-fill snapshot hook; no external scheduler bundled. |
+| **Tests** | `tests/test_valuation_m13.py` |
 
 ### TD-H3 — Backtest sensitivity does not vary M3 strategy parameters
 

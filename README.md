@@ -61,7 +61,7 @@ cd halal_quant_v1
 cp .env.example .env          # uncomment DATABASE_URL (match docker-compose postgres service)
 docker compose up -d postgres
 cd backend && source .venv/bin/activate
-alembic upgrade head          # reads DATABASE_URL from root .env (same as FastAPI)
+alembic upgrade head          # through M13 `portfolio_valuation_snapshots` (head `e8f91a2b4c10`)
 python -m scripts.seed_demo_to_db   # optional: synthetic OHLCV into ohlcv_candles
 python -m scripts.verify_postgres_setup   # connectivity, tables, portfolio/execution persist + reload
 ```

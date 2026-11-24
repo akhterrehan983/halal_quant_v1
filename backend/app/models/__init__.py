@@ -5,6 +5,7 @@ from app.models.market import OHLCVCandle
 from app.models.portfolio import PaperPortfolioState, PaperPosition, PaperTrade
 from app.models.backtesting import BacktestRunRow
 from app.models.shariah_execution import ExecutionStateRow, ShariahEligibilityStore, ShariahSnapshotRow
+from app.models.portfolio_valuation import PortfolioValuationSnapshot
 from app.models.portfolio_risk import (
     AllocationProposalRecord,
     PortfolioBook,
@@ -25,6 +26,7 @@ __all__ = [
     "PaperPortfolioState",
     "PaperPosition",
     "PaperTrade",
+    "PortfolioValuationSnapshot",
     "PortfolioBook",
     "RiskConfigurationRecord",
     "AllocationProposalRecord",
