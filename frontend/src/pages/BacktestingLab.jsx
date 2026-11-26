@@ -75,6 +75,15 @@ export default function BacktestingLab() {
           <MetricCard label="Costs" value={money(btResult.metrics.transaction_costs)} sub="Scenario configured" icon={Wallet} />
         </section>
       )}
+      {btResult?.evidence_grade && (
+        <p className="notice">
+          <ShieldCheck size={17} />
+          <span>
+            Evidence grade: <b>{btResult.evidence_grade}</b> · data: {btResult.data_provenance?.kind ?? 'unknown'}
+            {btResult.evidence_grade === 'demo' ? ' — synthetic or unknown data. Software-regression output, not performance evidence.' : ' — imported, not yet validated for research.'}
+          </span>
+        </p>
+      )}
       {btResult?.validation && <pre className="md-pre">{JSON.stringify(btResult.validation, null, 2)}</pre>}
       <EquityCurve points={equity} />
       {list.length > 0 && (

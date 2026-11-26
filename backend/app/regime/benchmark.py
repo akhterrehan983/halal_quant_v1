@@ -1,4 +1,11 @@
-"""Benchmark series from repository or equal-weight universe proxy."""
+"""Benchmark series from repository or equal-weight universe proxy.
+
+M14 Phase 1.1 (F-1): building the proxy has no side effects. It never adds the proxy to the stored
+symbol list or to the history store, so the tradable universe cannot change depending on whether (or
+in which order) earlier runs triggered the lazy build. The proxy is a pure function of the stored
+equity histories and is cached by a content fingerprint of those inputs (symbols and their stored bars,
+in both database and memory mode), so it can neither depend on run order nor go stale.
+"""
 
 from __future__ import annotations
 
@@ -7,24 +14,53 @@ from datetime import date
 import pandas as pd
 
 from app.data import sample_data
-from app.market_data.repository import SymbolNotFoundError, get_history_dataframe, list_universe_symbols
+from app.market_data.benchmarks import DEFAULT_BENCHMARK_SYMBOL
+from app.market_data.repository import (
+    SymbolNotFoundError,
+    bar_fingerprints,
+    get_history_dataframe,
+    list_universe_symbols,
+)
+
+# Latest proxy only; keyed by the fingerprint of its inputs, so changed data forces a rebuild.
+_PROXY_CACHE: dict[tuple, pd.DataFrame] = {}
+
+
+def clear_benchmark_cache() -> None:
+    _PROXY_CACHE.clear()
+
+
+def _inputs_fingerprint(symbols: list[str]) -> tuple:
+    """Identity of everything the proxy is computed from: which symbols have bars, and those bars.
+
+    The storage mode (database or memory) is decided inside ``repository.bar_fingerprints``; this
+    module deliberately reads no settings. Symbols with no bars are not proxy inputs and are omitted.
+    Both modes fingerprint bar content, so a changed bar with an identical symbol set rebuilds the proxy.
+    """
+    ordered = sorted({s.upper() for s in symbols})
+    prints = bar_fingerprints(ordered)
+    return tuple((sym, prints[sym]) for sym in ordered if sym in prints)
 
 
 def ensure_benchmark_history() -> pd.DataFrame:
-    symbol = "NIFTY500_PROXY"
+    """A stored benchmark series if one exists under the registered symbol, else the equal-weight proxy."""
     try:
-        return get_history_dataframe(symbol, limit=5000)
+        return get_history_dataframe(DEFAULT_BENCHMARK_SYMBOL, limit=5000)
     except SymbolNotFoundError:
         pass
-    if symbol in sample_data.HISTORIES:
-        return sample_data.HISTORIES[symbol]
-    return _build_equal_weight_proxy()
+    symbols = list_universe_symbols()  # equity universe: registered benchmarks are excluded
+    key = _inputs_fingerprint(symbols)
+    cached = _PROXY_CACHE.get(key)
+    if cached is None:
+        cached = _build_equal_weight_proxy(symbols)
+        _PROXY_CACHE.clear()
+        _PROXY_CACHE[key] = cached
+    return cached.copy()
 
 
-def _build_equal_weight_proxy() -> pd.DataFrame:
-    symbols = list_universe_symbols()
+def _build_equal_weight_proxy(symbols: list[str]) -> pd.DataFrame:
     frames = []
-    for sym in symbols:
+    for sym in sorted(symbols):  # fixed order: the result must not depend on list order
         try:
             df = get_history_dataframe(sym, limit=5000)
             df = df[["date", "close"]].copy()
@@ -34,12 +70,12 @@ def _build_equal_weight_proxy() -> pd.DataFrame:
         except SymbolNotFoundError:
             continue
     if not frames:
-        return sample_data.make_history("NIFTY500_PROXY", periods=520)
+        return sample_data.make_history(DEFAULT_BENCHMARK_SYMBOL, periods=520)
     merged = pd.concat(frames, ignore_index=True)
     avg_ret = merged.groupby("date")["ret"].mean()
     dates = pd.Series(avg_ret.index).sort_values()
     close = (1 + avg_ret.fillna(0)).cumprod() * 1000
-    out = pd.DataFrame(
+    return pd.DataFrame(
         {
             "date": dates.values,
             "open": close.values,
@@ -49,10 +85,6 @@ def _build_equal_weight_proxy() -> pd.DataFrame:
             "volume": 1_000_000,
         }
     )
-    sample_data.HISTORIES["NIFTY500_PROXY"] = out
-    if "NIFTY500_PROXY" not in sample_data.SYMBOLS:
-        sample_data.SYMBOLS.append("NIFTY500_PROXY")
-    return out
 
 
 def _filter_on_or_before(df: pd.DataFrame, as_of_date: date) -> pd.DataFrame:

@@ -3,6 +3,7 @@
 from datetime import date, timedelta
 from decimal import Decimal
 
+import pandas as pd
 import pytest
 
 from app.backtesting.schemas import BacktestConfig, ShariahBacktestMode
@@ -99,8 +100,10 @@ def test_backtest_can_exit_after_authorization():
     )
     run = run_backtest(cfg)
     assert run.status.value == "COMPLETED"
-    if run.trades:
-        assert any(t.exit_reason == "time_exit_authorized" for t in run.trades)
+    # M14 Phase 1: stops/targets are now enforced, so demo exits may be stop/target as well as time exits.
+    allowed = {"time_exit_authorized", "stop", "target", "stop_ownership_delayed"}
+    assert all(t.exit_reason in allowed for t in run.trades)
+    assert all(t.exit_date >= (pd.Timestamp(t.entry_date) + pd.offsets.BDay(3)).date() for t in run.trades)
 
 
 def test_sensitivity_changes_hold_days():

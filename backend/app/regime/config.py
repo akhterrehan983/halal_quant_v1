@@ -1,9 +1,11 @@
 from dataclasses import dataclass
 
+from app.market_data.benchmarks import DEFAULT_BENCHMARK_SYMBOL
+
 
 @dataclass(frozen=True)
 class RegimeConfig:
-    benchmark_symbol: str = "NIFTY500_PROXY"
+    benchmark_symbol: str = DEFAULT_BENCHMARK_SYMBOL
     min_bars: int = 120
     sma_fast: int = 50
     sma_slow: int = 200

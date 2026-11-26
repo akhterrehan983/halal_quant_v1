@@ -4,6 +4,7 @@ from datetime import date, datetime
 
 from app.execution import store
 from app.execution.schemas import OrderSide, OrderState, OrderType, PaperOrder
+from app.market_data.benchmarks import is_benchmark
 from app.portfolio import store as portfolio_store
 from app.portfolio.money import D
 from app.risk import manager as risk_manager
@@ -27,6 +28,8 @@ def validate_buy(order: PaperOrder, proposal: AllocationProposal | None) -> list
     errs: list[str] = []
     if order.quantity <= 0:
         errs.append("Quantity must be positive")
+    if is_benchmark(order.symbol):
+        errs.append("Registered benchmark / index proxy is not a tradable equity")
     ok, sh = eligibility_for_order(order.symbol)
     if not ok:
         errs.extend(sh)

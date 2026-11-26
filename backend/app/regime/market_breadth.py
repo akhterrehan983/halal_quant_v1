@@ -6,7 +6,13 @@ from datetime import date
 
 import pandas as pd
 
-from app.market_data.repository import iter_symbol_histories
+from app.market_data.benchmarks import benchmark_symbols
+from app.market_data.repository import (
+    SymbolNotFoundError,
+    get_history_window,
+    iter_symbol_histories,
+    list_universe_symbols,
+)
 from app.strategies.indicators import add_indicators
 
 
@@ -20,7 +26,21 @@ def compute_universe_breadth(as_of_date: date | None = None) -> dict:
     above_sma50 = 0
     total = 0
     skipped_insufficient = 0
-    for _symbol, df in iter_symbol_histories():
+    # Registered benchmarks / index proxies are never breadth constituents (M14 Phase 1.1, F-2).
+    benchmarks = benchmark_symbols()
+    if as_of_date is None:
+        pairs = [(sym, df) for sym, df in iter_symbol_histories() if sym.upper() not in benchmarks]
+    else:
+        # Point-in-time: 520 bars ending at ``as_of_date``, not the latest 520 bars (M14 B-01).
+        pairs = []
+        for sym in list_universe_symbols():
+            if sym.upper() in benchmarks:
+                continue
+            try:
+                pairs.append((sym, get_history_window(sym, end=as_of_date, lookback_bars=520)))
+            except (SymbolNotFoundError, ValueError):
+                continue
+    for _symbol, df in pairs:
         work = _slice_on_or_before(df, as_of_date) if as_of_date is not None else df.sort_values("date").reset_index(drop=True)
         if len(work) < 60:
             skipped_insufficient += 1

@@ -6,6 +6,7 @@ from enum import Enum
 
 from pydantic import BaseModel, Field, field_validator
 
+from app.market_data.benchmarks import DEFAULT_BENCHMARK_SYMBOL
 from app.portfolio.money import D
 
 
@@ -18,6 +19,19 @@ class CostScenario(str, Enum):
     ZERO = "ZERO"
     REALISTIC = "REALISTIC"
     CONSERVATIVE = "CONSERVATIVE"
+
+
+class EvidenceGrade(str, Enum):
+    """How much a result can be trusted as evidence. Phase 1 never assigns a research-grade label."""
+
+    DEMO = "demo"  # synthetic or unknown provenance: software-regression output only
+    IMPORTED_UNVERIFIED = "imported_unverified"  # real imported bars, not yet validated for research
+
+
+class DataProvenance(BaseModel):
+    kind: str = "unknown"  # synthetic | imported | mixed | unknown
+    source: str = "unknown"
+    symbols: dict[str, str] = Field(default_factory=dict)
 
 
 class BacktestStatus(str, Enum):
@@ -36,7 +50,7 @@ class BacktestConfig(BaseModel):
     horizon: str = "swing"
     strategies: list[str] = Field(default_factory=lambda: ["unified"])
     symbols: list[str] | None = None
-    benchmark: str = "NIFTY500_PROXY"
+    benchmark: str = DEFAULT_BENCHMARK_SYMBOL
     shariah_profile_id: str = "default"
     shariah_mode: ShariahBacktestMode = ShariahBacktestMode.STRICT
     ownership_policy: str = "conservative_delivery"
@@ -78,6 +92,12 @@ class CompletedTrade(BaseModel):
     exit_reason: str = ""
     shariah_status: str = ""
     ownership_delayed_exit: bool = False
+    signal_quantity: int = 0  # quantity sized at signal time, before fill-time validation
+    # Stop reporting (None on legacy rows and on exits that are not stop-driven).
+    stop_price: Decimal | None = None  # the protective stop the position carried
+    stop_breach_date: date | None = None  # session whose low (or open) first traded at/through the stop
+    delayed_exit_date: date | None = None  # set only when the sale was held back by ownership authorisation
+    loss_beyond_stop: Decimal | None = None  # max(0, stop - actual fill) * quantity, before costs
 
 
 class EquityPoint(BaseModel):
@@ -107,6 +127,9 @@ class BacktestMetrics(BaseModel):
     risk_rejections: int = 0
     ownership_blocked_exits: int = 0
     unfilled_orders: int = 0
+    fill_rejections: int = 0
+    stale_marks: int = 0
+    max_stale_days: int = 0
 
 
 class BacktestRun(BaseModel):
@@ -120,3 +143,6 @@ class BacktestRun(BaseModel):
     equity_curve: list[EquityPoint] = Field(default_factory=list)
     trades: list[CompletedTrade] = Field(default_factory=list)
     validation: dict = Field(default_factory=dict)
+    # Legacy rows without these fields load as DEMO / unknown provenance (conservative default).
+    evidence_grade: EvidenceGrade = EvidenceGrade.DEMO
+    data_provenance: DataProvenance = Field(default_factory=DataProvenance)

@@ -180,6 +180,39 @@ def symbol_date_range(session: Session, symbol: str) -> tuple[date | None, date 
     return row[0], row[1]
 
 
+def candle_fingerprints(session: Session, symbols: list[str]) -> dict[str, tuple]:
+    """Cheap, content-sensitive identity of each symbol's stored candles (one grouped query, no row load).
+
+    Per symbol: row count, first and last trading date, sums of open/high/low/close/volume, the sum of
+    close x row id (so offsetting edits and closes swapped between dates do not cancel, which plain sums
+    cannot detect), and the latest ``updated_at``. Any added, removed, or edited bar changes at least one
+    component. Symbols without candles are omitted. A raw SQL edit that bypasses ``updated_at`` and only
+    moves a middle bar's date, leaving every value and count unchanged, would not be detected.
+    """
+    wanted = sorted({s.upper() for s in symbols})
+    if not wanted:
+        return {}
+    c = OHLCVCandle
+    rows = session.execute(
+        select(
+            c.symbol,
+            func.count(),
+            func.min(c.trading_date),
+            func.max(c.trading_date),
+            func.sum(c.open),
+            func.sum(c.high),
+            func.sum(c.low),
+            func.sum(c.close),
+            func.sum(c.close * c.id),
+            func.sum(c.volume),
+            func.max(c.updated_at),
+        )
+        .where(c.symbol.in_(wanted))
+        .group_by(c.symbol)
+    ).all()
+    return {row[0]: tuple(str(part) for part in row[1:]) for row in rows}
+
+
 def list_db_symbols(session: Session) -> list[str]:
     return list(session.execute(select(Stock.symbol).where(Stock.is_active.is_(True))).scalars().all())
 

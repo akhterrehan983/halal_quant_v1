@@ -16,6 +16,11 @@ class SimPosition:
     stop: Decimal
     strategy: str
     sell_authorized_date: date | None = None
+    target: Decimal | None = None
+    signal_quantity: int = 0
+    # Stop breached while the sale was not yet authorised; executed at the first authorised session.
+    stop_pending: bool = False
+    stop_breach_date: date | None = None  # first session the stop was breached while the sale was unauthorised
 
 
 @dataclass

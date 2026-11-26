@@ -58,4 +58,7 @@ def compute_metrics(
         risk_rejections=stats.get("risk_rejections", 0),
         ownership_blocked_exits=stats.get("ownership_blocked_exits", 0),
         unfilled_orders=stats.get("unfilled_orders", 0),
+        fill_rejections=stats.get("fill_rejections", 0),
+        stale_marks=stats.get("stale_marks", 0),
+        max_stale_days=stats.get("max_stale_days", 0),
     )

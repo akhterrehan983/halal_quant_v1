@@ -20,6 +20,9 @@ class Settings(BaseSettings):
     database_url: str | None = Field(default=None, validation_alias="DATABASE_URL")
     csv_max_upload_mb: int = 25
     import_conflict_policy: str = "skip"  # reject | skip | update
+    # Extra benchmark / index-proxy symbols (comma-separated). Registered benchmarks are never scanned
+    # or traded as equities. NIFTY500_PROXY is built in; see app/market_data/benchmarks.py.
+    benchmark_symbols: str = Field(default="", validation_alias="BENCHMARK_SYMBOLS")
 
     @property
     def cors_origin_list(self) -> list[str]:
