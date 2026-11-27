@@ -1,11 +1,11 @@
 # Halal Quant V1 — Authoritative Project Handoff
 
 > **Maintenance header**
-> - **Last updated:** 2026-11-26
-> - **Current milestone / phase:** M14 — Backtesting Methodology Hardening (Phase 1 & Phase 1.1 complete and test-verified; F-4 breadth cache **implemented and verified 2026-11-27, not yet committed**; Phase 2 **not** started)
-> - **Latest verified Git commit:** `498f8bc` (`498f8bc0dd9abbfc855e3e0e057fd6eda415144f` — *"Harden M14 backtesting phase 1"*, `HEAD -> main`, matching `origin/main`)
-> - **Working tree status at update:** Dirty, nothing staged. Modified: `backend/app/regime/market_breadth.py`, `backend/app/backtesting/simulator.py`, `docs/m14_phase1_review.md`. Untracked: `backend/tests/test_breadth_cache_m14.py`, `backend/tests/baselines/m14_post_phase1_1.json`, `backend/tests/baselines/m14_ablation_first4.json`, `docs/PROJECT_HANDOFF.md`.
-> - **Current next action:** Commit in two commits (F-4 cache + tests; then docs + Phase 1.1 baselines). Before the first commit, optionally start PostgreSQL and rerun the two `postgres` tests (see section 11.3a for the data-deletion caveat). Then authorize M14 Phase 2 separately.
+> - **Last updated:** 2026-11-27
+> - **Current milestone / phase:** M14 — Backtesting Methodology Hardening (Phase 1, Phase 1.1 & F-4 breadth cache committed; **Phase 2 (walk-forward v2) implemented, uncommitted** — plan approved with clarifications in [`docs/m14_phase2_plan.md`](m14_phase2_plan.md))
+> - **Latest verified Git commit:** `16163c0` (*"M14 F-4: run-scoped as-of breadth cache"*, `HEAD -> main`, matching `origin/main`), following `3d5714c` (*"M14: F-4 verification, Phase 1.1 baselines, handoff"*) and `498f8bc`
+> - **Working tree status at update:** Uncommitted Phase 2 work: new `walk_forward_schemas.py`, `walk_forward_v2.py`, `api/v2/`, `tests/test_walk_forward_m14.py`, `docs/m14_phase2_plan.md`; modified `app/main.py` (router mount) and this handoff
+> - **Current next action:** Full suite passed (193 passed, 2 deselected). Run the baseline `--compare` on its own (commands in section 11.3a), then commit. No commit has been made for Phase 2.
 >
 > **Maintenance rule:** Update this document after every completed milestone, major implementation phase, significant architectural decision, or verified test-status change. Never mark planned work as implemented without repository and test evidence.
 
@@ -186,7 +186,7 @@ Before M14 work began, the static and empirical audit concluded that the backtes
 | **B-30** | No check that data covered requested end date | **Fixed (Phase 1)** | `start_gap_days` / `end_gap_days` checked and warned when `> 5` days |
 | **F-1..F-3, F-5** | Review findings: run-order proxy mutation, benchmark in breadth, hardcoded 1-symbol exclusion, stale audit doc | **Fixed (Phase 1.1)** | See Phase 1.1 summary below |
 | **F-4** | Per-signal breadth recomputation runtime scaling | **Redundant recomputation: cache implemented and verified (2026-11-27). Real-universe runtime budget: still open (Phase 5 `B-24`)** | Profiled: breadth was 66% of a real-signal backtest; run-scoped as-of cache in `market_breadth.py` (see "F-4 breadth profiling and cache" below and review §9) |
-| **B-17** | Walk-forward blends train/test spans and labels OOS | **Deferred (Phase 2 — not started)** | Will add separate v2 endpoint isolating train/val/test segments |
+| **B-17** | Walk-forward blends train/test spans and labels OOS | **Phase 2 v2 engine implemented (uncommitted); v1 endpoint unchanged and still blended — see [`docs/m14_phase2_plan.md`](m14_phase2_plan.md) section 12** | Plan defines `/api/v2` independent train/test walk-forward with frozen per-fold selection and test-only `oos_summary` |
 | **B-04, B-05, B-06, B-07, B-15, B-21, B-25, B-27** | Missing buy costs in trade P&L, `ZERO` cost default, asymmetric exit fills, unused ADV cap, unliquidated end positions, fill-time limit/expiry checks, unsourced/missing SEBI cost rates, `SimBook` parity test | **Deferred (Phase 3 — not started)** | `ZERO` remains default until rates are confirmed and Phase 3 is implemented |
 | **B-11, B-13, B-16, B-18, B-19, B-20, B-31** | Degenerate Monte Carlo, missing benchmark-relative metrics, Sortino/Calmar/sample flags, short-window CAGR, Sharpe convention, calendar vs session hold days, dead schema fields | **Deferred (Phase 4 — not started)** | — |
 | **B-22, B-23, B-24, B-26** | Strategy parameter sensitivity overlay, multiple-testing dispersion, full history/indicator caching, explicit `as_of_date` in `build_context` | **Deferred (Phase 5 / hygiene — not started)** | `B-26` inner-join mitigates leakage today |
@@ -278,8 +278,8 @@ Verified from `git status` and `git log` on `2026-11-26`:
   - `M backend/app/backtesting/simulator.py` — `run_backtest` wraps `_run_backtest` in `breadth_cache_scope()`; run body unchanged.
   - `?? backend/tests/test_breadth_cache_m14.py` — 13 F-4 tests.
   - Note: a zero-byte file `main` at the repo root was introduced in commit `08c1680` (minor hygiene artifact; do not touch without checking).
-- **Phase 2 status:** **Not started and not approved.** `app/backtesting/walk_forward.py` still contains the original blended-window loop (`B-17`).
-- **Next engineering task:** Verify the F-4 cache (section 11.3a), then commit. Phase 2 needs explicit approval after that.
+- **Phase 2 status:** **Implemented in the working tree, not committed.** Additive v2 engine and `/api/v2` endpoints (design and as-built notes: [`docs/m14_phase2_plan.md`](m14_phase2_plan.md) sections 0 and 12). Verification so far: `tests/test_walk_forward_m14.py` 49 passed; focused backtest/regime group (`test_walk_forward_m14`, `test_backtest_phase1_m14`, `test_backtest_phase1_1_m14`, `test_breadth_cache_m14`, `test_backtesting`, `test_regime`, `test_regime_point_in_time`) 159 passed with `-m "not postgres"`. Full suite `pytest -q -m "not postgres"` after Phase 2: **193 passed, 2 deselected** (144 existing + 49 new; run by the user, 2026-11-27, 220.9 s). Baseline `--compare` not yet run after Phase 2. PostgreSQL-marked tests (2) not run. Evidence grade stays DEMO. `app/backtesting/walk_forward.py` (v1, blended window, `B-17`) is unchanged.
+- **Next engineering task:** Review and commit Phase 2 after the full-suite and baseline `--compare` checks; then Phase 3 (execution realism and costs).
 
 ---
 
@@ -292,7 +292,7 @@ Verified from `git status` and `git log` on `2026-11-26`:
 5. [x] **Verify cached-vs-uncached breadth identity** — `test_breadth_cache_m14.py` 13 passed (2026-11-27); `--compare` against `m14_post_phase1_1.json` gives `scenarios_sha256 equal: True`, no differences in A, B or C.
 6. [ ] **Run targeted tests and full backend suite** — Confirm focused M14/regime tests and full `pytest -q` suite pass cleanly.
 7. [ ] **Review Phase 1 / Phase 1.1 acceptance criteria** — Confirm clean Git status, stable runtime baseline, and sign-off before opening Phase 2.
-8. [ ] **Only then begin Phase 2 (Walk-forward hardening — `B-17`)**:
+8. [~] **Phase 2 (Walk-forward hardening — `B-17`)** — *Implemented additively as `/api/v2`, uncommitted; see [`docs/m14_phase2_plan.md`](m14_phase2_plan.md) section 12. Original scope text kept below for reference:*
    - **Strict Phase 2 scope:** Implement a v2 walk-forward endpoint and engine (`walk_forward.py`, `schemas.py`, `api/v1/backtests.py`) that executes **independent** train, validation, and test simulations over disjoint date windows with frozen parameters per fold. Report segment metrics separately and compute `oos_metrics` strictly from test-window trades—never blend train and test spans into an OOS headline.
    - **Subsequent M14 phases (all planned / not started):**
      - **Phase 3:** Execution realism & costs (`B-04`, `B-05` `REALISTIC` default only after rate confirmation, `B-06` symmetric exits, `B-07` ADV cap, `B-15` end-of-backtest liquidation policy, `B-21` fill-time limit/expiry checks, `B-25` SEBI charges with cited rates, `B-27` `SimBook`/live sizing parity).

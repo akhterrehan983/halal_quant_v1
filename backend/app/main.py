@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.legacy import router as legacy_router
 from app.api.v1.router import api_v1_router
+from app.api.v2.router import api_v2_router
 from app.core.config import settings
 from app.core.exceptions import HalalQuantError, halal_quant_exception_handler
 from app.core.logging import setup_logging
@@ -26,3 +27,4 @@ app.add_middleware(
 app.add_exception_handler(HalalQuantError, halal_quant_exception_handler)
 app.include_router(legacy_router)
 app.include_router(api_v1_router)
+app.include_router(api_v2_router)
