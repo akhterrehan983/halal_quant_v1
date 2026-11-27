@@ -42,6 +42,7 @@ from app.market_data import repository as repo
 from app.market_data.benchmarks import benchmark_symbols
 from app.portfolio.money import D, money
 from app.portfolio.position_sizing import compute_position_quantity
+from app.regime.market_breadth import breadth_cache_scope
 from app.risk.limits import DEFAULT_RISK_CONFIG
 from app.signals.generator import generate_unified_signal
 from app.signals.schemas import SignalCategory
@@ -346,6 +347,12 @@ def _queue_entry(
 
 
 def run_backtest(config: BacktestConfig) -> BacktestRun:
+    # Every candidate signal on a session asks for the same as-of breadth; compute it once per run (F-4).
+    with breadth_cache_scope():
+        return _run_backtest(config)
+
+
+def _run_backtest(config: BacktestConfig) -> BacktestRun:
     config.validate_dates()
     uni_snap, tradable = universe_for_backtest(config.start_date, config.end_date, config.symbols)
     warnings: list[str] = []

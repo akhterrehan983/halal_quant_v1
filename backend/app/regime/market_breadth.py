@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Iterator
+from contextlib import contextmanager
+from contextvars import ContextVar
 from datetime import date
 
 import pandas as pd
@@ -9,11 +12,34 @@ import pandas as pd
 from app.market_data.benchmarks import benchmark_symbols
 from app.market_data.repository import (
     SymbolNotFoundError,
+    bar_fingerprints,
     get_history_window,
     iter_symbol_histories,
     list_universe_symbols,
 )
 from app.strategies.indicators import add_indicators
+
+# As-of breadth memo, active only inside ``breadth_cache_scope`` (one backtest run). Separate from the
+# benchmark proxy cache. Nothing survives the scope, so results can never depend on earlier runs.
+_SCOPED_CACHE: ContextVar[dict | None] = ContextVar("breadth_scoped_cache", default=None)
+
+
+@contextmanager
+def breadth_cache_scope() -> Iterator[None]:
+    """Memoise as-of breadth for the duration of the block (M14 F-4). Nested scopes share the outer memo.
+
+    Key: (as-of date, sorted equity universe with benchmarks excluded, each equity's stored-bar
+    fingerprint). Any added, removed, or edited equity bar, any universe change, and any benchmark
+    registry change therefore misses and recomputes. Latest-bar breadth (``as_of_date=None``) is never cached.
+    """
+    if _SCOPED_CACHE.get() is not None:
+        yield
+        return
+    token = _SCOPED_CACHE.set({})
+    try:
+        yield
+    finally:
+        _SCOPED_CACHE.reset(token)
 
 
 def _slice_on_or_before(df: pd.DataFrame, as_of_date: date) -> pd.DataFrame:
@@ -21,8 +47,25 @@ def _slice_on_or_before(df: pd.DataFrame, as_of_date: date) -> pd.DataFrame:
     return df.loc[mask].sort_values("date").reset_index(drop=True)
 
 
+def _cache_key(as_of_date: date) -> tuple:
+    benchmarks = benchmark_symbols()
+    equities = sorted({s.upper() for s in list_universe_symbols() if s.upper() not in benchmarks})
+    fingerprints = bar_fingerprints(equities)
+    return (as_of_date, tuple(equities), tuple(sorted(fingerprints.items())))
+
+
 def compute_universe_breadth(as_of_date: date | None = None) -> dict:
     """Fraction of universe symbols above SMA50 as of ``as_of_date`` (or latest if None)."""
+    cache = _SCOPED_CACHE.get()
+    if cache is None or as_of_date is None:
+        return _compute_universe_breadth(as_of_date)
+    key = _cache_key(as_of_date)
+    if key not in cache:
+        cache[key] = _compute_universe_breadth(as_of_date)
+    return dict(cache[key])
+
+
+def _compute_universe_breadth(as_of_date: date | None) -> dict:
     above_sma50 = 0
     total = 0
     skipped_insufficient = 0
