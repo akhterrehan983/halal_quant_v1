@@ -1,0 +1,970 @@
+{
+  "meta": {
+    "anchor_last_bar": "2026-11-20",
+    "backend_app_has_uncommitted_changes": false,
+    "demo_symbols": [
+      "TCS",
+      "INFY",
+      "RELIANCE",
+      "HDFCBANK",
+      "SUNPHARMA",
+      "TATAMOTORS",
+      "BEL",
+      "COALINDIA"
+    ],
+    "explicit_symbols": [
+      "TCS",
+      "INFY",
+      "RELIANCE",
+      "HDFCBANK"
+    ],
+    "generated_at_utc": "2026-11-26T17:28:11.967211+00:00",
+    "git_commit": "498f8bc0dd9abbfc855e3e0e057fd6eda415144f",
+    "note": "Synthetic demo data. Software-regression baseline only; not performance evidence.",
+    "numpy": "2.5.5",
+    "pandas": "2.3.3",
+    "platform": "Linux-6.14.0-37-generic-x86_64-with-glibc2.41",
+    "python": "3.13.3",
+    "window": [
+      "2026-08-03",
+      "2026-10-30"
+    ]
+  },
+  "scenarios": {
+    "A_research_only_zero_cost": {
+      "elapsed_seconds": 58.3,
+      "equity": {
+        "first": {
+          "cash": "100000.0000",
+          "date": "2026-08-03",
+          "drawdown": "0",
+          "equity": "100000.00",
+          "invested": "0.0000"
+        },
+        "last": {
+          "cash": "90789.78",
+          "date": "2026-10-30",
+          "drawdown": "0.007956829879490878111156292907",
+          "equity": "100561.69",
+          "invested": "9771.91"
+        },
+        "points": 65,
+        "sha256": "b81272dc9e28b999b0cd2d4ba1ea8602ea1193953dd421ae82a7cd078a33bded"
+      },
+      "run": {
+        "backtest_id": null,
+        "completed_at": null,
+        "config": {
+          "benchmark": "NIFTY500_PROXY",
+          "cost_scenario": "ZERO",
+          "end_date": "2026-10-30",
+          "hold_days": null,
+          "horizon": "swing",
+          "initial_capital": "100000.0000",
+          "max_adv_participation": "0.0500",
+          "max_positions": 3,
+          "min_signal_score": 0,
+          "name": "m14_baseline_A_research_only_zero_cost",
+          "ownership_policy": "conservative_delivery",
+          "random_seed": 42,
+          "shariah_mode": "RESEARCH_ONLY",
+          "shariah_profile_id": "default",
+          "slippage_bps": 10,
+          "start_date": "2026-08-03",
+          "strategies": [
+            "unified"
+          ],
+          "symbols": [
+            "TCS",
+            "INFY",
+            "RELIANCE",
+            "HDFCBANK"
+          ],
+          "universe_mode": "current_snapshot_with_survivorship_warning"
+        },
+        "created_at": null,
+        "data_provenance": {
+          "kind": "synthetic",
+          "source": "synthetic demo data",
+          "symbols": {
+            "HDFCBANK": "synthetic demo data",
+            "INFY": "synthetic demo data",
+            "RELIANCE": "synthetic demo data",
+            "TCS": "synthetic demo data"
+          }
+        },
+        "evidence_grade": "demo",
+        "metrics": {
+          "avg_holding_days": "8.555555555555555",
+          "benchmark_return": null,
+          "cagr": "0.0235",
+          "fill_rejections": 0,
+          "final_capital": "100561.69",
+          "initial_capital": "100000.0000",
+          "max_drawdown": "0.009531894019035602249345879807",
+          "max_stale_days": 0,
+          "ownership_blocked_exits": 2,
+          "profit_factor": "1.49",
+          "risk_rejections": 0,
+          "shariah_rejections": 0,
+          "sharpe": "0.7198316254890831",
+          "sortino": null,
+          "stale_marks": 0,
+          "total_return": "0.0056",
+          "total_trades": 9,
+          "transaction_costs": "0.0000",
+          "unfilled_orders": 0,
+          "volatility": "0.03130863062230232",
+          "win_rate": "0.4444"
+        },
+        "status": "COMPLETED",
+        "trades": [
+          {
+            "costs": "0.0000",
+            "delayed_exit_date": null,
+            "entry_date": "2026-08-05",
+            "entry_price": "211.87",
+            "exit_date": "2026-08-17",
+            "exit_price": "201.6294",
+            "exit_reason": "time_exit_authorized",
+            "gross_pnl": "-430.10520000",
+            "holding_days": 12,
+            "horizon": "swing",
+            "loss_beyond_stop": null,
+            "net_pnl": "-430.10520000",
+            "ownership_delayed_exit": false,
+            "quantity": 42,
+            "shariah_status": "",
+            "signal_quantity": 48,
+            "slippage": "0.0000",
+            "stop_breach_date": null,
+            "stop_price": "194.1900",
+            "strategy": "unified",
+            "symbol": "HDFCBANK"
+          },
+          {
+            "costs": "0.0000",
+            "delayed_exit_date": null,
+            "entry_date": "2026-08-19",
+            "entry_price": "203.70",
+            "exit_date": "2026-08-27",
+            "exit_price": "194.5949",
+            "exit_reason": "stop",
+            "gross_pnl": "-437.04480000",
+            "holding_days": 8,
+            "horizon": "swing",
+            "loss_beyond_stop": "70.8048",
+            "net_pnl": "-437.04480000",
+            "ownership_delayed_exit": false,
+            "quantity": 48,
+            "shariah_status": "",
+            "signal_quantity": 48,
+            "slippage": "0.0000",
+            "stop_breach_date": "2026-08-27",
+            "stop_price": "196.0700",
+            "strategy": "unified",
+            "symbol": "HDFCBANK"
+          },
+          {
+            "costs": "0.0000",
+            "delayed_exit_date": null,
+            "entry_date": "2026-09-02",
+            "entry_price": "120.01",
+            "exit_date": "2026-09-11",
+            "exit_price": "127.9600",
+            "exit_reason": "target",
+            "gross_pnl": "651.90000000",
+            "holding_days": 9,
+            "horizon": "swing",
+            "loss_beyond_stop": null,
+            "net_pnl": "651.90000000",
+            "ownership_delayed_exit": false,
+            "quantity": 82,
+            "shariah_status": "",
+            "signal_quantity": 83,
+            "slippage": "0.0000",
+            "stop_breach_date": null,
+            "stop_price": "112.6500",
+            "strategy": "unified",
+            "symbol": "RELIANCE"
+          },
+          {
+            "costs": "0.0000",
+            "delayed_exit_date": null,
+            "entry_date": "2026-09-25",
+            "entry_price": "133.92",
+            "exit_date": "2026-10-05",
+            "exit_price": "130.5504",
+            "exit_reason": "time_exit_authorized",
+            "gross_pnl": "-249.35040000",
+            "holding_days": 10,
+            "horizon": "swing",
+            "loss_beyond_stop": null,
+            "net_pnl": "-249.35040000",
+            "ownership_delayed_exit": false,
+            "quantity": 74,
+            "shariah_status": "",
+            "signal_quantity": 74,
+            "slippage": "0.0000",
+            "stop_breach_date": null,
+            "stop_price": "126.7800",
+            "strategy": "unified",
+            "symbol": "RELIANCE"
+          },
+          {
+            "costs": "0.0000",
+            "delayed_exit_date": null,
+            "entry_date": "2026-09-28",
+            "entry_price": "198.97",
+            "exit_date": "2026-10-08",
+            "exit_price": "205.5729",
+            "exit_reason": "time_exit_authorized",
+            "gross_pnl": "323.54210000",
+            "holding_days": 10,
+            "horizon": "swing",
+            "loss_beyond_stop": null,
+            "net_pnl": "323.54210000",
+            "ownership_delayed_exit": false,
+            "quantity": 49,
+            "shariah_status": "",
+            "signal_quantity": 49,
+            "slippage": "0.0000",
+            "stop_breach_date": null,
+            "stop_price": "190.6100",
+            "strategy": "unified",
+            "symbol": "HDFCBANK"
+          },
+          {
+            "costs": "0.0000",
+            "delayed_exit_date": null,
+            "entry_date": "2026-10-06",
+            "entry_price": "129.61",
+            "exit_date": "2026-10-14",
+            "exit_price": "141.0000",
+            "exit_reason": "target",
+            "gross_pnl": "865.64000000",
+            "holding_days": 8,
+            "horizon": "swing",
+            "loss_beyond_stop": null,
+            "net_pnl": "865.64000000",
+            "ownership_delayed_exit": false,
+            "quantity": 76,
+            "shariah_status": "",
+            "signal_quantity": 76,
+            "slippage": "0.0000",
+            "stop_breach_date": null,
+            "stop_price": "123.5900",
+            "strategy": "unified",
+            "symbol": "RELIANCE"
+          },
+          {
+            "costs": "0.0000",
+            "delayed_exit_date": null,
+            "entry_date": "2026-10-09",
+            "entry_price": "207.71",
+            "exit_date": "2026-10-14",
+            "exit_price": "221.1200",
+            "exit_reason": "target",
+            "gross_pnl": "643.68000000",
+            "holding_days": 5,
+            "horizon": "swing",
+            "loss_beyond_stop": null,
+            "net_pnl": "643.68000000",
+            "ownership_delayed_exit": false,
+            "quantity": 48,
+            "shariah_status": "",
+            "signal_quantity": 48,
+            "slippage": "0.0000",
+            "stop_breach_date": null,
+            "stop_price": "195.2100",
+            "strategy": "unified",
+            "symbol": "HDFCBANK"
+          },
+          {
+            "costs": "0.0000",
+            "delayed_exit_date": "2026-10-20",
+            "entry_date": "2026-10-15",
+            "entry_price": "136.43",
+            "exit_date": "2026-10-20",
+            "exit_price": "133.5484",
+            "exit_reason": "stop_ownership_delayed",
+            "gross_pnl": "-207.47520000",
+            "holding_days": 5,
+            "horizon": "swing",
+            "loss_beyond_stop": "0.0000",
+            "net_pnl": "-207.47520000",
+            "ownership_delayed_exit": true,
+            "quantity": 72,
+            "shariah_status": "",
+            "signal_quantity": 72,
+            "slippage": "0.0000",
+            "stop_breach_date": "2026-10-16",
+            "stop_price": "130.7800",
+            "strategy": "unified",
+            "symbol": "RELIANCE"
+          },
+          {
+            "costs": "0.0000",
+            "delayed_exit_date": null,
+            "entry_date": "2026-10-20",
+            "entry_price": "221.71",
+            "exit_date": "2026-10-30",
+            "exit_price": "212.0642",
+            "exit_reason": "time_exit_authorized",
+            "gross_pnl": "-347.24880000",
+            "holding_days": 10,
+            "horizon": "swing",
+            "loss_beyond_stop": null,
+            "net_pnl": "-347.24880000",
+            "ownership_delayed_exit": false,
+            "quantity": 36,
+            "shariah_status": "",
+            "signal_quantity": 47,
+            "slippage": "0.0000",
+            "stop_breach_date": null,
+            "stop_price": "200.9800",
+            "strategy": "unified",
+            "symbol": "HDFCBANK"
+          }
+        ],
+        "validation": {
+          "coverage": {
+            "benchmark_excluded": [],
+            "benchmarks_registered": [
+              "NIFTY500_PROXY"
+            ],
+            "end_gap_days": 0,
+            "excluded": [],
+            "first_session": "2026-08-03",
+            "last_session": "2026-10-30",
+            "requested_end": "2026-10-30",
+            "requested_start": "2026-08-03",
+            "scanned_symbols": [
+              "TCS",
+              "INFY",
+              "RELIANCE",
+              "HDFCBANK"
+            ],
+            "start_gap_days": 0,
+            "symbols": {
+              "HDFCBANK": {
+                "first_bar": "2026-08-03",
+                "last_bar": "2026-10-30",
+                "status": "full"
+              },
+              "INFY": {
+                "first_bar": "2026-08-03",
+                "last_bar": "2026-10-30",
+                "status": "full"
+              },
+              "RELIANCE": {
+                "first_bar": "2026-08-03",
+                "last_bar": "2026-10-30",
+                "status": "full"
+              },
+              "TCS": {
+                "first_bar": "2026-08-03",
+                "last_bar": "2026-10-30",
+                "status": "full"
+              }
+            }
+          },
+          "data_provenance": {
+            "kind": "synthetic",
+            "source": "synthetic demo data",
+            "symbols": {
+              "HDFCBANK": "synthetic demo data",
+              "INFY": "synthetic demo data",
+              "RELIANCE": "synthetic demo data",
+              "TCS": "synthetic demo data"
+            }
+          },
+          "look_ahead_protections": [
+            "Signals evaluated with as_of_index",
+            "Fills on session after signal date open",
+            "No signal-close fills"
+          ],
+          "ownership_delayed_stops": {
+            "count": 1,
+            "events": [
+              {
+                "actual_fill": "133.5484",
+                "delayed_exit_date": "2026-10-20",
+                "loss_beyond_stop": "0.0000",
+                "quantity": 72,
+                "stop_breach_date": "2026-10-16",
+                "stop_price": "130.7800",
+                "symbol": "RELIANCE"
+              }
+            ],
+            "total_loss_beyond_stop": "0.0000"
+          },
+          "shariah_mode": "RESEARCH_ONLY",
+          "warnings": [
+            "Survivorship bias: backtest uses current universe membership for all historical dates.",
+            "Synthetic or unknown-provenance data: results are software-regression output, not performance evidence.",
+            "Ownership-delayed stop exits: 1 stop breach(es) occurred while the sale was not yet authorised and were executed at the first authorised open; total loss beyond stop 0.0000 (before costs).",
+            "Settlement dates use business-day approximation \u2014 not authoritative NSE holiday calendar.",
+            "Survivorship bias: backtest uses current universe membership.",
+            "RESEARCH_ONLY Shariah mode \u2014 results not Shariah-validated."
+          ]
+        },
+        "warnings": [
+          "Survivorship bias: backtest uses current universe membership for all historical dates.",
+          "Synthetic or unknown-provenance data: results are software-regression output, not performance evidence.",
+          "Ownership-delayed stop exits: 1 stop breach(es) occurred while the sale was not yet authorised and were executed at the first authorised open; total loss beyond stop 0.0000 (before costs)."
+        ]
+      }
+    },
+    "B_research_only_realistic_cost": {
+      "elapsed_seconds": 54.3,
+      "equity": {
+        "first": {
+          "cash": "100000.0000",
+          "date": "2026-08-03",
+          "drawdown": "0",
+          "equity": "100000.00",
+          "invested": "0.0000"
+        },
+        "last": {
+          "cash": "90684.01",
+          "date": "2026-10-30",
+          "drawdown": "0.008188552534276938509339459922",
+          "equity": "100455.92",
+          "invested": "9771.91"
+        },
+        "points": 65,
+        "sha256": "bda9c20a74d7fdef70eb04a712fa4ac51770b3a77f11170d52417fdd2e1d17fe"
+      },
+      "run": {
+        "backtest_id": null,
+        "completed_at": null,
+        "config": {
+          "benchmark": "NIFTY500_PROXY",
+          "cost_scenario": "REALISTIC",
+          "end_date": "2026-10-30",
+          "hold_days": null,
+          "horizon": "swing",
+          "initial_capital": "100000.0000",
+          "max_adv_participation": "0.0500",
+          "max_positions": 3,
+          "min_signal_score": 0,
+          "name": "m14_baseline_B_research_only_realistic_cost",
+          "ownership_policy": "conservative_delivery",
+          "random_seed": 42,
+          "shariah_mode": "RESEARCH_ONLY",
+          "shariah_profile_id": "default",
+          "slippage_bps": 10,
+          "start_date": "2026-08-03",
+          "strategies": [
+            "unified"
+          ],
+          "symbols": [
+            "TCS",
+            "INFY",
+            "RELIANCE",
+            "HDFCBANK"
+          ],
+          "universe_mode": "current_snapshot_with_survivorship_warning"
+        },
+        "created_at": null,
+        "data_provenance": {
+          "kind": "synthetic",
+          "source": "synthetic demo data",
+          "symbols": {
+            "HDFCBANK": "synthetic demo data",
+            "INFY": "synthetic demo data",
+            "RELIANCE": "synthetic demo data",
+            "TCS": "synthetic demo data"
+          }
+        },
+        "evidence_grade": "demo",
+        "metrics": {
+          "avg_holding_days": "8.555555555555555",
+          "benchmark_return": null,
+          "cagr": "0.0191",
+          "fill_rejections": 0,
+          "final_capital": "100455.92",
+          "initial_capital": "100000.0000",
+          "max_drawdown": "0.009749357912311451709888310326",
+          "max_stale_days": 0,
+          "ownership_blocked_exits": 2,
+          "profit_factor": "1.42",
+          "risk_rejections": 0,
+          "shariah_rejections": 0,
+          "sharpe": "0.5895790536087171",
+          "sortino": null,
+          "stale_marks": 0,
+          "total_return": "0.0046",
+          "total_trades": 9,
+          "transaction_costs": "86.6100",
+          "unfilled_orders": 0,
+          "volatility": "0.03119077259430384",
+          "win_rate": "0.4444"
+        },
+        "status": "COMPLETED",
+        "trades": [
+          {
+            "costs": "8.4700",
+            "delayed_exit_date": null,
+            "entry_date": "2026-08-05",
+            "entry_price": "211.87",
+            "exit_date": "2026-08-17",
+            "exit_price": "201.6294",
+            "exit_reason": "time_exit_authorized",
+            "gross_pnl": "-430.10520000",
+            "holding_days": 12,
+            "horizon": "swing",
+            "loss_beyond_stop": null,
+            "net_pnl": "-438.57520000",
+            "ownership_delayed_exit": false,
+            "quantity": 42,
+            "shariah_status": "",
+            "signal_quantity": 48,
+            "slippage": "0.0000",
+            "stop_breach_date": null,
+            "stop_price": "194.1900",
+            "strategy": "unified",
+            "symbol": "HDFCBANK"
+          },
+          {
+            "costs": "9.3400",
+            "delayed_exit_date": null,
+            "entry_date": "2026-08-19",
+            "entry_price": "203.70",
+            "exit_date": "2026-08-27",
+            "exit_price": "194.5949",
+            "exit_reason": "stop",
+            "gross_pnl": "-437.04480000",
+            "holding_days": 8,
+            "horizon": "swing",
+            "loss_beyond_stop": "70.8048",
+            "net_pnl": "-446.38480000",
+            "ownership_delayed_exit": false,
+            "quantity": 48,
+            "shariah_status": "",
+            "signal_quantity": 48,
+            "slippage": "0.0000",
+            "stop_breach_date": "2026-08-27",
+            "stop_price": "196.0700",
+            "strategy": "unified",
+            "symbol": "HDFCBANK"
+          },
+          {
+            "costs": "10.4900",
+            "delayed_exit_date": null,
+            "entry_date": "2026-09-02",
+            "entry_price": "120.01",
+            "exit_date": "2026-09-11",
+            "exit_price": "127.9600",
+            "exit_reason": "target",
+            "gross_pnl": "651.90000000",
+            "holding_days": 9,
+            "horizon": "swing",
+            "loss_beyond_stop": null,
+            "net_pnl": "641.41000000",
+            "ownership_delayed_exit": false,
+            "quantity": 82,
+            "shariah_status": "",
+            "signal_quantity": 83,
+            "slippage": "0.0000",
+            "stop_breach_date": null,
+            "stop_price": "112.6500",
+            "strategy": "unified",
+            "symbol": "RELIANCE"
+          },
+          {
+            "costs": "9.6600",
+            "delayed_exit_date": null,
+            "entry_date": "2026-09-25",
+            "entry_price": "133.92",
+            "exit_date": "2026-10-05",
+            "exit_price": "130.5504",
+            "exit_reason": "time_exit_authorized",
+            "gross_pnl": "-249.35040000",
+            "holding_days": 10,
+            "horizon": "swing",
+            "loss_beyond_stop": null,
+            "net_pnl": "-259.01040000",
+            "ownership_delayed_exit": false,
+            "quantity": 74,
+            "shariah_status": "",
+            "signal_quantity": 74,
+            "slippage": "0.0000",
+            "stop_breach_date": null,
+            "stop_price": "126.7800",
+            "strategy": "unified",
+            "symbol": "RELIANCE"
+          },
+          {
+            "costs": "10.0700",
+            "delayed_exit_date": null,
+            "entry_date": "2026-09-28",
+            "entry_price": "198.97",
+            "exit_date": "2026-10-08",
+            "exit_price": "205.5729",
+            "exit_reason": "time_exit_authorized",
+            "gross_pnl": "323.54210000",
+            "holding_days": 10,
+            "horizon": "swing",
+            "loss_beyond_stop": null,
+            "net_pnl": "313.47210000",
+            "ownership_delayed_exit": false,
+            "quantity": 49,
+            "shariah_status": "",
+            "signal_quantity": 49,
+            "slippage": "0.0000",
+            "stop_breach_date": null,
+            "stop_price": "190.6100",
+            "strategy": "unified",
+            "symbol": "HDFCBANK"
+          },
+          {
+            "costs": "10.7200",
+            "delayed_exit_date": null,
+            "entry_date": "2026-10-06",
+            "entry_price": "129.61",
+            "exit_date": "2026-10-14",
+            "exit_price": "141.0000",
+            "exit_reason": "target",
+            "gross_pnl": "865.64000000",
+            "holding_days": 8,
+            "horizon": "swing",
+            "loss_beyond_stop": null,
+            "net_pnl": "854.92000000",
+            "ownership_delayed_exit": false,
+            "quantity": 76,
+            "shariah_status": "",
+            "signal_quantity": 76,
+            "slippage": "0.0000",
+            "stop_breach_date": null,
+            "stop_price": "123.5900",
+            "strategy": "unified",
+            "symbol": "RELIANCE"
+          },
+          {
+            "costs": "10.6100",
+            "delayed_exit_date": null,
+            "entry_date": "2026-10-09",
+            "entry_price": "207.71",
+            "exit_date": "2026-10-14",
+            "exit_price": "221.1200",
+            "exit_reason": "target",
+            "gross_pnl": "643.68000000",
+            "holding_days": 5,
+            "horizon": "swing",
+            "loss_beyond_stop": null,
+            "net_pnl": "633.07000000",
+            "ownership_delayed_exit": false,
+            "quantity": 48,
+            "shariah_status": "",
+            "signal_quantity": 48,
+            "slippage": "0.0000",
+            "stop_breach_date": null,
+            "stop_price": "195.2100",
+            "strategy": "unified",
+            "symbol": "HDFCBANK"
+          },
+          {
+            "costs": "9.6200",
+            "delayed_exit_date": "2026-10-20",
+            "entry_date": "2026-10-15",
+            "entry_price": "136.43",
+            "exit_date": "2026-10-20",
+            "exit_price": "133.5484",
+            "exit_reason": "stop_ownership_delayed",
+            "gross_pnl": "-207.47520000",
+            "holding_days": 5,
+            "horizon": "swing",
+            "loss_beyond_stop": "0.0000",
+            "net_pnl": "-217.09520000",
+            "ownership_delayed_exit": true,
+            "quantity": 72,
+            "shariah_status": "",
+            "signal_quantity": 72,
+            "slippage": "0.0000",
+            "stop_breach_date": "2026-10-16",
+            "stop_price": "130.7800",
+            "strategy": "unified",
+            "symbol": "RELIANCE"
+          },
+          {
+            "costs": "7.6300",
+            "delayed_exit_date": null,
+            "entry_date": "2026-10-20",
+            "entry_price": "221.71",
+            "exit_date": "2026-10-30",
+            "exit_price": "212.0642",
+            "exit_reason": "time_exit_authorized",
+            "gross_pnl": "-347.24880000",
+            "holding_days": 10,
+            "horizon": "swing",
+            "loss_beyond_stop": null,
+            "net_pnl": "-354.87880000",
+            "ownership_delayed_exit": false,
+            "quantity": 36,
+            "shariah_status": "",
+            "signal_quantity": 47,
+            "slippage": "0.0000",
+            "stop_breach_date": null,
+            "stop_price": "200.9800",
+            "strategy": "unified",
+            "symbol": "HDFCBANK"
+          }
+        ],
+        "validation": {
+          "coverage": {
+            "benchmark_excluded": [],
+            "benchmarks_registered": [
+              "NIFTY500_PROXY"
+            ],
+            "end_gap_days": 0,
+            "excluded": [],
+            "first_session": "2026-08-03",
+            "last_session": "2026-10-30",
+            "requested_end": "2026-10-30",
+            "requested_start": "2026-08-03",
+            "scanned_symbols": [
+              "TCS",
+              "INFY",
+              "RELIANCE",
+              "HDFCBANK"
+            ],
+            "start_gap_days": 0,
+            "symbols": {
+              "HDFCBANK": {
+                "first_bar": "2026-08-03",
+                "last_bar": "2026-10-30",
+                "status": "full"
+              },
+              "INFY": {
+                "first_bar": "2026-08-03",
+                "last_bar": "2026-10-30",
+                "status": "full"
+              },
+              "RELIANCE": {
+                "first_bar": "2026-08-03",
+                "last_bar": "2026-10-30",
+                "status": "full"
+              },
+              "TCS": {
+                "first_bar": "2026-08-03",
+                "last_bar": "2026-10-30",
+                "status": "full"
+              }
+            }
+          },
+          "data_provenance": {
+            "kind": "synthetic",
+            "source": "synthetic demo data",
+            "symbols": {
+              "HDFCBANK": "synthetic demo data",
+              "INFY": "synthetic demo data",
+              "RELIANCE": "synthetic demo data",
+              "TCS": "synthetic demo data"
+            }
+          },
+          "look_ahead_protections": [
+            "Signals evaluated with as_of_index",
+            "Fills on session after signal date open",
+            "No signal-close fills"
+          ],
+          "ownership_delayed_stops": {
+            "count": 1,
+            "events": [
+              {
+                "actual_fill": "133.5484",
+                "delayed_exit_date": "2026-10-20",
+                "loss_beyond_stop": "0.0000",
+                "quantity": 72,
+                "stop_breach_date": "2026-10-16",
+                "stop_price": "130.7800",
+                "symbol": "RELIANCE"
+              }
+            ],
+            "total_loss_beyond_stop": "0.0000"
+          },
+          "shariah_mode": "RESEARCH_ONLY",
+          "warnings": [
+            "Survivorship bias: backtest uses current universe membership for all historical dates.",
+            "Synthetic or unknown-provenance data: results are software-regression output, not performance evidence.",
+            "Ownership-delayed stop exits: 1 stop breach(es) occurred while the sale was not yet authorised and were executed at the first authorised open; total loss beyond stop 0.0000 (before costs).",
+            "Settlement dates use business-day approximation \u2014 not authoritative NSE holiday calendar.",
+            "Survivorship bias: backtest uses current universe membership.",
+            "RESEARCH_ONLY Shariah mode \u2014 results not Shariah-validated."
+          ]
+        },
+        "warnings": [
+          "Survivorship bias: backtest uses current universe membership for all historical dates.",
+          "Synthetic or unknown-provenance data: results are software-regression output, not performance evidence.",
+          "Ownership-delayed stop exits: 1 stop breach(es) occurred while the sale was not yet authorised and were executed at the first authorised open; total loss beyond stop 0.0000 (before costs)."
+        ]
+      }
+    },
+    "C_strict_zero_cost": {
+      "elapsed_seconds": 74.7,
+      "equity": {
+        "first": {
+          "cash": "100000.0000",
+          "date": "2026-08-03",
+          "drawdown": "0",
+          "equity": "100000.00",
+          "invested": "0.0000"
+        },
+        "last": {
+          "cash": "100000.0000",
+          "date": "2026-10-30",
+          "drawdown": "0",
+          "equity": "100000.00",
+          "invested": "0.0000"
+        },
+        "points": 65,
+        "sha256": "8c752f1bbe910faba0bb6f2ea7e5825ffd05057911750200eab3f48ddde3c5f1"
+      },
+      "run": {
+        "backtest_id": null,
+        "completed_at": null,
+        "config": {
+          "benchmark": "NIFTY500_PROXY",
+          "cost_scenario": "ZERO",
+          "end_date": "2026-10-30",
+          "hold_days": null,
+          "horizon": "swing",
+          "initial_capital": "100000.0000",
+          "max_adv_participation": "0.0500",
+          "max_positions": 3,
+          "min_signal_score": 0,
+          "name": "m14_baseline_C_strict_zero_cost",
+          "ownership_policy": "conservative_delivery",
+          "random_seed": 42,
+          "shariah_mode": "STRICT",
+          "shariah_profile_id": "default",
+          "slippage_bps": 10,
+          "start_date": "2026-08-03",
+          "strategies": [
+            "unified"
+          ],
+          "symbols": [
+            "TCS",
+            "INFY",
+            "RELIANCE",
+            "HDFCBANK"
+          ],
+          "universe_mode": "current_snapshot_with_survivorship_warning"
+        },
+        "created_at": null,
+        "data_provenance": {
+          "kind": "synthetic",
+          "source": "synthetic demo data",
+          "symbols": {
+            "HDFCBANK": "synthetic demo data",
+            "INFY": "synthetic demo data",
+            "RELIANCE": "synthetic demo data",
+            "TCS": "synthetic demo data"
+          }
+        },
+        "evidence_grade": "demo",
+        "metrics": {
+          "avg_holding_days": null,
+          "benchmark_return": null,
+          "cagr": "0.0000",
+          "fill_rejections": 0,
+          "final_capital": "100000.00",
+          "initial_capital": "100000.0000",
+          "max_drawdown": "0",
+          "max_stale_days": 0,
+          "ownership_blocked_exits": 0,
+          "profit_factor": null,
+          "risk_rejections": 0,
+          "shariah_rejections": 47,
+          "sharpe": null,
+          "sortino": null,
+          "stale_marks": 0,
+          "total_return": "0.0000",
+          "total_trades": 0,
+          "transaction_costs": "0.0000",
+          "unfilled_orders": 0,
+          "volatility": "0.0",
+          "win_rate": null
+        },
+        "status": "COMPLETED",
+        "trades": [],
+        "validation": {
+          "coverage": {
+            "benchmark_excluded": [],
+            "benchmarks_registered": [
+              "NIFTY500_PROXY"
+            ],
+            "end_gap_days": 0,
+            "excluded": [],
+            "first_session": "2026-08-03",
+            "last_session": "2026-10-30",
+            "requested_end": "2026-10-30",
+            "requested_start": "2026-08-03",
+            "scanned_symbols": [
+              "TCS",
+              "INFY",
+              "RELIANCE",
+              "HDFCBANK"
+            ],
+            "start_gap_days": 0,
+            "symbols": {
+              "HDFCBANK": {
+                "first_bar": "2026-08-03",
+                "last_bar": "2026-10-30",
+                "status": "full"
+              },
+              "INFY": {
+                "first_bar": "2026-08-03",
+                "last_bar": "2026-10-30",
+                "status": "full"
+              },
+              "RELIANCE": {
+                "first_bar": "2026-08-03",
+                "last_bar": "2026-10-30",
+                "status": "full"
+              },
+              "TCS": {
+                "first_bar": "2026-08-03",
+                "last_bar": "2026-10-30",
+                "status": "full"
+              }
+            }
+          },
+          "data_provenance": {
+            "kind": "synthetic",
+            "source": "synthetic demo data",
+            "symbols": {
+              "HDFCBANK": "synthetic demo data",
+              "INFY": "synthetic demo data",
+              "RELIANCE": "synthetic demo data",
+              "TCS": "synthetic demo data"
+            }
+          },
+          "look_ahead_protections": [
+            "Signals evaluated with as_of_index",
+            "Fills on session after signal date open",
+            "No signal-close fills"
+          ],
+          "ownership_delayed_stops": {
+            "count": 0,
+            "events": [],
+            "total_loss_beyond_stop": "0.0000"
+          },
+          "shariah_mode": "STRICT",
+          "warnings": [
+            "Survivorship bias: backtest uses current universe membership for all historical dates.",
+            "Synthetic or unknown-provenance data: results are software-regression output, not performance evidence.",
+            "Settlement dates use business-day approximation \u2014 not authoritative NSE holiday calendar.",
+            "Survivorship bias: backtest uses current universe membership."
+          ]
+        },
+        "warnings": [
+          "Survivorship bias: backtest uses current universe membership for all historical dates.",
+          "Synthetic or unknown-provenance data: results are software-regression output, not performance evidence."
+        ]
+      }
+    }
+  },
+  "scenarios_sha256": "df45a20ce6c796ca1e144803a92a511489cca50a4ab9a3c0b041121216800b26"
+}
